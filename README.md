@@ -26,7 +26,7 @@ serve((req: Request) => {
 });
 ```
 
-And add a single script tag anywhere to your HTML:
+And add a single `refresh/client.js` script tag anywhere to your HTML:
 
 ```html
 <!DOCTYPE html>
