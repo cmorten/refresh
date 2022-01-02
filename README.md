@@ -9,6 +9,7 @@ To use `refresh` middleware, add 5 lines to your Deno server implementation:
 
 ```ts
 import { serve } from "https://deno.land/std/http/server.ts";
+import { refresh } from "https://deno.land/x/refresh/mod.ts";
 
 // Create refresh middleware
 const middleware = refresh();

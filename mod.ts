@@ -99,6 +99,7 @@ const isRefreshWs = (url: string) => RE_REFRESH_WS.test(url);
  *
  * ```ts
  * import { serve } from "https://deno.land/std/http/server.ts";
+ * import { refresh } from "https://deno.land/x/refresh/mod.ts";
  *
  * const middleware = refresh();
  *
