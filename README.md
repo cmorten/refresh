@@ -1,11 +1,11 @@
 # refresh
 
-Simple browser reloading middleware on file change for your Deno web
-applications.
+Simple browser reload on file change middleware for your Deno web applications.
 
 ## Usage
 
-To use `refresh` middleware, add 5 lines to your Deno server implementation:
+To use `refresh` middleware, just add a few extra lines to your Deno server
+implementation:
 
 ```ts
 import { serve } from "https://deno.land/std/http/server.ts";
@@ -14,13 +14,11 @@ import { refresh } from "https://deno.land/x/refresh/mod.ts";
 // Create refresh middleware
 const middleware = refresh();
 
-serve((req: Request) => {
-  // In your server just add into the middleware stack!
-  const refreshResponse = middleware(req);
+serve((req) => {
+  // In your server handler, just add into the middleware stack!
+  const res = middleware(req);
 
-  if (refreshResponse) {
-    return refreshResponse;
-  }
+  if (res) return res;
 
   return new Response("Hello Deno!");
 });
@@ -37,7 +35,7 @@ And add a single `refresh/client.js` script tag anywhere to your HTML:
     <title>Example Refresh App</title>
   </head>
   <body>
-    <script type="module" src="https://deno.land/x/refresh/client.js"></script>
+    <script src="https://deno.land/x/refresh/client.js"></script>
     <h1>Hello Deno!</h1>
   </body>
 </html>
@@ -55,3 +53,11 @@ deno run --allow-net --allow-read ./example/server.ts
 
 Open one or more browser tabs on `http://localhost:8000/` and start editing the
 `index.html` to see live reloading of all the tabs in the browser.
+
+## Documentation
+
+See [Deno Docs](https://doc.deno.land/https://deno.land/x/refresh/mod.ts).
+
+## License
+
+[MIT License](LICENSE).

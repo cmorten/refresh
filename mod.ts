@@ -1,4 +1,4 @@
-interface RefreshInit {
+export interface RefreshInit {
   /**
    * Debounce timeout for browser refresh on file change. Default `30`ms.
    */
@@ -49,6 +49,8 @@ async function watch(
   function close() {
     try {
       watcher.close();
+      sockets.forEach((socket) => socket.close());
+      sockets.clear();
     } catch {
       // ignore
     }
@@ -104,17 +106,15 @@ const isRefreshWs = (url: string) => RE_REFRESH_WS.test(url);
  * const middleware = refresh();
  *
  * serve((req: Request) => {
- *  const refreshResponse = middleware(req);
+ *  const res = middleware(req);
  *
- *  if (refreshResponse) {
- *    return refreshResponse;
- *  }
+ *  if (res) return res;
  *
  *  return new Response("Hello Deno!");
  * });
  * ```
  *
- * @param {RefreshInit} refreshInit configuration for browser refresh
+ * @param {RefreshInit} refreshInit optional configuration for browser refresh middleware.
  */
 export function refresh(
   refreshInit?: RefreshInit,
@@ -122,7 +122,7 @@ export function refresh(
   watch(refreshInit);
 
   return function refreshMiddleware(req: Request): Response | null {
-    if (isRefreshWs(req.url)) {
+    if (isRefreshWs(req.url) && !refreshInit?.signal?.aborted) {
       const upgrade = Deno.upgradeWebSocket(req);
 
       upgrade.socket.onclose = () => {

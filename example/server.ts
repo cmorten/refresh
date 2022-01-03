@@ -10,20 +10,12 @@ const __dirname = fromFileUrl(dirname(import.meta.url));
 
 const middleware = refresh();
 
-serve(async (req: Request) => {
+serve((req: Request) => {
   const res = middleware(req);
 
-  if (res) {
-    return res;
-  } else if (req.url.endsWith("client.js")) {
-    const client = await Deno.readTextFile(join(__dirname, "../client.js"));
+  if (res) return res;
 
-    return new Response(client, {
-      headers: { "Content-Type": "application/javascript" },
-    });
-  }
-
-  const index = await Deno.readTextFile(join(__dirname, "./index.html"));
+  const index = Deno.readTextFileSync(join(__dirname, "./index.html"));
 
   return new Response(index, { headers: { "Content-Type": "text/html" } });
 });
